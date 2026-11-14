@@ -76,6 +76,9 @@ func ExampleContactService_Update() {
 		Topics: []inboxjot.TopicChoice{
 			{ID: "top_news", Status: inboxjot.TopicUnsubscribed},
 		},
+		Brands: []inboxjot.BrandChoice{
+			{ID: "brd_acme", Status: inboxjot.BrandSubscribed},
+		},
 	}
 
 	contact, err := client.Contacts.Update(context.Background(), "jane@example.com", params)

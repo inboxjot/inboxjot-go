@@ -16,6 +16,7 @@ const (
 
 type CreateTopicParams struct {
 	Name              string           `json:"name"`
+	BrandID           string           `json:"brand_id,omitempty"`
 	Description       Nullable[string] `json:"description,omitzero"`
 	DefaultSubscribed *bool            `json:"default_subscribed,omitempty"`
 	Visibility        TopicVisibility  `json:"visibility,omitempty"`
@@ -28,6 +29,7 @@ type CreateTopicParams struct {
 
 type UpdateTopicParams struct {
 	Name              Nullable[string] `json:"name,omitzero"`
+	BrandID           string           `json:"brand_id,omitempty"`
 	Description       Nullable[string] `json:"description,omitzero"`
 	DefaultSubscribed *bool            `json:"default_subscribed,omitempty"`
 	Visibility        TopicVisibility  `json:"visibility,omitempty"`
@@ -56,6 +58,7 @@ type Topic struct {
 	SenderEmail       *string         `json:"sender_email"`
 	RedirectURL       *string         `json:"redirect_url"`
 	IsDefault         bool            `json:"is_default"`
+	BrandID           *string         `json:"brand_id"`
 	Counts            TopicCounts     `json:"counts"`
 	CreatedAt         time.Time       `json:"created_at"`
 	UpdatedAt         time.Time       `json:"updated_at"`

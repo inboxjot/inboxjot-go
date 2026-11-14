@@ -222,8 +222,8 @@ func TestTopicRoutes(t *testing.T) {
 		{method: "GET", path: "/v1/topics", query: "before=cur_1", call: func(ctx context.Context, c *Client) error {
 			return ignore(c.Topics.List(ctx, PageParams{Before: "cur_1"}))
 		}},
-		{method: "POST", path: "/v1/topics", body: `{"name":"News","default_subscribed":false,"visibility":"private"}`, call: func(ctx context.Context, c *Client) error {
-			return ignore(c.Topics.Create(ctx, CreateTopicParams{Name: "News", DefaultSubscribed: &enabled, Visibility: TopicPrivate}))
+		{method: "POST", path: "/v1/topics", body: `{"name":"News","brand_id":"brd_1","default_subscribed":false,"visibility":"private"}`, call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Topics.Create(ctx, CreateTopicParams{Name: "News", BrandID: "brd_1", DefaultSubscribed: &enabled, Visibility: TopicPrivate}))
 		}},
 		{method: "GET", path: "/v1/topics/top_1", call: func(ctx context.Context, c *Client) error {
 			return ignore(c.Topics.Get(ctx, "top_1"))
@@ -233,6 +233,26 @@ func TestTopicRoutes(t *testing.T) {
 		}},
 		{method: "DELETE", path: "/v1/topics/top_1", call: func(ctx context.Context, c *Client) error {
 			return ignore(c.Topics.Delete(ctx, "top_1"))
+		}},
+	})
+}
+
+func TestBrandRoutes(t *testing.T) {
+	checkRoutes(t, []route{
+		{method: "GET", path: "/v1/brands", query: "after=cur_1&per_page=10", call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Brands.List(ctx, PageParams{After: "cur_1", PerPage: 10}))
+		}},
+		{method: "POST", path: "/v1/brands", body: `{"name":"Acme"}`, call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Brands.Create(ctx, CreateBrandParams{Name: "Acme"}))
+		}},
+		{method: "GET", path: "/v1/brands/brd_1", call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Brands.Get(ctx, "brd_1"))
+		}},
+		{method: "PATCH", path: "/v1/brands/brd_1", body: `{"name":"Acme Labs"}`, call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Brands.Update(ctx, "brd_1", UpdateBrandParams{Name: "Acme Labs"}))
+		}},
+		{method: "DELETE", path: "/v1/brands/brd_1", call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Brands.Delete(ctx, "brd_1"))
 		}},
 	})
 }
@@ -568,12 +588,23 @@ func TestDecodesSegments(t *testing.T) {
 
 func TestDecodesTopics(t *testing.T) {
 	page := decode[TopicPage](t, `{"data":[{"id":"top_1","name":"News","description":null,"default_subscribed":true,"visibility":"hidden",
-		"double_opt_in":false,"form_enabled":false,"sender_name":null,"sender_email":null,"redirect_url":null,"is_default":true,
+		"double_opt_in":false,"form_enabled":false,"sender_name":null,"sender_email":null,"redirect_url":null,"is_default":true,"brand_id":"brd_1",
 		"counts":{"subscribed":3,"pending":1,"unsubscribed":0},"created_at":"2026-10-10T09:00:00.000Z","updated_at":"2026-10-10T09:00:00.000Z"}],
 		"next_cursor":null,"prev_cursor":null}`)
 	topic := page.Data[0]
-	if topic.Visibility != "hidden" || topic.Description != nil || topic.Counts.Pending != 1 || !topic.IsDefault {
+	if topic.Visibility != "hidden" || topic.Description != nil || topic.Counts.Pending != 1 || !topic.IsDefault || *topic.BrandID != "brd_1" {
 		t.Fatalf("topic = %+v", topic)
+	}
+}
+
+func TestDecodesBrands(t *testing.T) {
+	page := decode[BrandPage](t, `{"data":[{"id":"brd_1","name":"Acme","slug":"acme","logo_url":null,"is_default":true,
+		"default_topic_id":"top_1","topic_count":2,"created_at":"2026-10-10T09:00:00.000Z","updated_at":"2026-10-10T09:00:00.000Z"}],
+		"next_cursor":"cur_2","prev_cursor":null}`)
+	brand := page.Data[0]
+	if brand.Slug != "acme" || brand.LogoURL != nil || !brand.IsDefault || *brand.DefaultTopicID != "top_1" || brand.TopicCount != 2 ||
+		brand.CreatedAt.IsZero() || *page.NextCursor != "cur_2" || page.PrevCursor != nil {
+		t.Fatalf("brands = %+v", page)
 	}
 }
 

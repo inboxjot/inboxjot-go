@@ -54,7 +54,7 @@ file, _ := os.ReadFile("logo.png")
 image, err := client.Images.Upload(ctx, inboxjot.UploadImageParams{File: file, FileName: "logo.png"})
 ```
 
-The client covers the whole public API: `Emails`, `Contacts`, `Events`, `Campaigns`, `Templates`, `Domains`, `Images`, `Segments`, `Topics` and `Webhooks`. The [API reference](https://inboxjot.com/docs) lists every endpoint and field.
+The client covers the whole public API: `Emails`, `Contacts`, `Events`, `Campaigns`, `Templates`, `Domains`, `Images`, `Segments`, `Topics`, `Brands` and `Webhooks`. The [API reference](https://inboxjot.com/docs) lists every endpoint and field.
 
 ### Pagination
 

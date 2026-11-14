@@ -502,6 +502,8 @@ func TestPatchBodies(t *testing.T) {
 	updatedContact := `{"id":"ct_1","email":"jane+news@acme.dev","first_name":null,"last_name":"Lovelace",` +
 		`"status":"subscribed","language":"en","properties":{},"segments":[{"id":"seg_1","name":"Customers"}],` +
 		`"topics":[{"id":"tp_1","name":"News","subscribed":true,"status":null}],` +
+		`"brands":[{"id":"brd_1","name":"Acme","status":"unsubscribed","paused_until":null,` +
+		`"unsubscribed_at":"2026-10-11T09:00:00.000Z","unsubscribe_source":"team"}],` +
 		`"created_at":"2026-10-10T09:00:00.000Z","updated_at":"2026-10-10T09:00:00.000Z"}`
 
 	client, requests := startServer(t, func(_ int, w http.ResponseWriter, _ *http.Request) {
@@ -538,6 +540,12 @@ func TestPatchBodies(t *testing.T) {
 			},
 			want: `{"segment_ids":[],"topics":[{"id":"tp_1","status":"unsubscribed"}]}`,
 		},
+		{
+			params: UpdateContactParams{
+				Brands: []BrandChoice{{ID: "brd_1", Status: BrandUnsubscribed}},
+			},
+			want: `{"brands":[{"id":"brd_1","status":"unsubscribed"}]}`,
+		},
 	}
 
 	for i, tc := range cases {
@@ -550,6 +558,10 @@ func TestPatchBodies(t *testing.T) {
 			contact.Segments[0].Name == "Customers" &&
 			*contact.LastName == "Lovelace" &&
 			contact.Topics[0].Status == nil &&
+			contact.Brands[0].Status == BrandUnsubscribed &&
+			contact.Brands[0].PausedUntil == nil &&
+			!contact.Brands[0].UnsubscribedAt.IsZero() &&
+			*contact.Brands[0].UnsubscribeSource == UnsubscribedByTeam &&
 			!contact.CreatedAt.IsZero() &&
 			!contact.UpdatedAt.IsZero()
 		if !decoded {

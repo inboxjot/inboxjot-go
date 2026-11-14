@@ -48,6 +48,7 @@ type Client struct {
 	Images    *ImageService
 	Segments  *SegmentService
 	Topics    *TopicService
+	Brands    *BrandService
 	Webhooks  *WebhookService
 
 	// A pointer, so fmt prints an address and never the key.
@@ -111,6 +112,7 @@ func NewClient(apiKey string, opts ...Option) *Client {
 	c.Images = &ImageService{c}
 	c.Segments = &SegmentService{c}
 	c.Topics = &TopicService{c}
+	c.Brands = &BrandService{c}
 	c.Webhooks = &WebhookService{c}
 
 	return c

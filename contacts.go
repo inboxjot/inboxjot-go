@@ -23,6 +23,20 @@ const (
 	TopicUnsubscribed TopicStatus = "unsubscribed"
 )
 
+type BrandStatus string
+
+const (
+	BrandSubscribed   BrandStatus = "subscribed"
+	BrandUnsubscribed BrandStatus = "unsubscribed"
+)
+
+type UnsubscribeSource string
+
+const (
+	UnsubscribedByContact UnsubscribeSource = "contact"
+	UnsubscribedByTeam    UnsubscribeSource = "team"
+)
+
 type CreateContactParams struct {
 	Email      string           `json:"email"`
 	FirstName  Nullable[string] `json:"first_name,omitzero"`
@@ -43,11 +57,17 @@ type UpdateContactParams struct {
 	Subscribed *bool            `json:"subscribed,omitempty"`
 	SegmentIDs []string         `json:"segment_ids,omitzero"`
 	Topics     []TopicChoice    `json:"topics,omitzero"`
+	Brands     []BrandChoice    `json:"brands,omitzero"`
 }
 
 type TopicChoice struct {
 	ID     string      `json:"id"`
 	Status TopicStatus `json:"status"`
+}
+
+type BrandChoice struct {
+	ID     string      `json:"id"`
+	Status BrandStatus `json:"status"`
 }
 
 type SavedContact struct {
@@ -67,6 +87,15 @@ type ContactTopic struct {
 	Status     *ContactStatus `json:"status"`
 }
 
+type ContactBrand struct {
+	ID                string             `json:"id"`
+	Name              string             `json:"name"`
+	Status            BrandStatus        `json:"status"`
+	PausedUntil       *time.Time         `json:"paused_until"`
+	UnsubscribedAt    *time.Time         `json:"unsubscribed_at"`
+	UnsubscribeSource *UnsubscribeSource `json:"unsubscribe_source"`
+}
+
 type Contact struct {
 	ID         string         `json:"id"`
 	Email      string         `json:"email"`
@@ -77,6 +106,7 @@ type Contact struct {
 	Properties map[string]any `json:"properties"`
 	Segments   []SegmentRef   `json:"segments"`
 	Topics     []ContactTopic `json:"topics"`
+	Brands     []ContactBrand `json:"brands"`
 	CreatedAt  time.Time      `json:"created_at"`
 	UpdatedAt  time.Time      `json:"updated_at"`
 }
