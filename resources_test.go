@@ -334,6 +334,12 @@ func TestEventRoutes(t *testing.T) {
 		{method: "POST", path: "/v1/events", body: `{"name":"signed_up","email":"jane@acme.dev"}`, call: func(ctx context.Context, c *Client) error {
 			return ignore(c.Events.Send(ctx, SendEventParams{Name: "signed_up", Email: "jane@acme.dev"}))
 		}},
+		{method: "POST", path: "/v1/events/batch", body: `[{"name":"signed_up","email":"jane@acme.dev","user_id":"usr_1"},{"name":"paid","user_id":"usr_1","occurred_at":"2026-11-14T09:30:00Z"}]`, call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Events.Batch(ctx, []SendEventParams{
+				{Name: "signed_up", Email: "jane@acme.dev", UserID: "usr_1"},
+				{Name: "paid", UserID: "usr_1", OccurredAt: time.Date(2026, 11, 14, 9, 30, 0, 0, time.UTC)},
+			}))
+		}},
 	})
 }
 

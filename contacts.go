@@ -39,6 +39,7 @@ const (
 
 type CreateContactParams struct {
 	Email      string           `json:"email"`
+	UserID     string           `json:"user_id,omitempty"`
 	FirstName  Nullable[string] `json:"first_name,omitzero"`
 	LastName   Nullable[string] `json:"last_name,omitzero"`
 	Language   string           `json:"language,omitempty"`
@@ -49,6 +50,7 @@ type CreateContactParams struct {
 }
 
 type UpdateContactParams struct {
+	UserID     Nullable[string] `json:"user_id,omitzero"`
 	FirstName  Nullable[string] `json:"first_name,omitzero"`
 	LastName   Nullable[string] `json:"last_name,omitzero"`
 	Language   string           `json:"language,omitempty"`
@@ -99,6 +101,7 @@ type ContactBrand struct {
 type Contact struct {
 	ID         string         `json:"id"`
 	Email      string         `json:"email"`
+	UserID     *string        `json:"user_id"`
 	FirstName  *string        `json:"first_name"`
 	LastName   *string        `json:"last_name"`
 	Status     ContactStatus  `json:"status"`
