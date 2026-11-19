@@ -55,33 +55,37 @@ type AttachmentParams struct {
 }
 
 type SendEmailParams struct {
-	From        string             `json:"from,omitempty"`
-	To          []string           `json:"to"`
-	Cc          []string           `json:"cc,omitempty"`
-	Bcc         []string           `json:"bcc,omitempty"`
-	ReplyTo     []string           `json:"reply_to,omitempty"`
-	Subject     string             `json:"subject,omitempty"`
-	Template    *Template          `json:"template,omitempty"`
-	HTML        string             `json:"html,omitempty"`
-	Text        string             `json:"text,omitempty"`
-	Headers     map[string]string  `json:"headers,omitempty"`
-	Tags        []Tag              `json:"tags,omitempty"`
-	ScheduledAt time.Time          `json:"scheduled_at,omitzero"`
-	Attachments []AttachmentParams `json:"attachments,omitempty"`
+	From          string             `json:"from,omitempty"`
+	To            []string           `json:"to"`
+	Cc            []string           `json:"cc,omitempty"`
+	Bcc           []string           `json:"bcc,omitempty"`
+	ReplyTo       []string           `json:"reply_to,omitempty"`
+	Subject       string             `json:"subject,omitempty"`
+	Template      *Template          `json:"template,omitempty"`
+	HTML          string             `json:"html,omitempty"`
+	Text          string             `json:"text,omitempty"`
+	Headers       map[string]string  `json:"headers,omitempty"`
+	Tags          []Tag              `json:"tags,omitempty"`
+	ScheduledAt   time.Time          `json:"scheduled_at,omitzero"`
+	Attachments   []AttachmentParams `json:"attachments,omitempty"`
+	OpenTracking  Nullable[bool]     `json:"open_tracking,omitzero"`
+	ClickTracking Nullable[bool]     `json:"click_tracking,omitzero"`
 }
 
 type BatchEmailParams struct {
-	From     string            `json:"from,omitempty"`
-	To       []string          `json:"to"`
-	Cc       []string          `json:"cc,omitempty"`
-	Bcc      []string          `json:"bcc,omitempty"`
-	ReplyTo  []string          `json:"reply_to,omitempty"`
-	Subject  string            `json:"subject,omitempty"`
-	Template *Template         `json:"template,omitempty"`
-	HTML     string            `json:"html,omitempty"`
-	Text     string            `json:"text,omitempty"`
-	Headers  map[string]string `json:"headers,omitempty"`
-	Tags     []Tag             `json:"tags,omitempty"`
+	From          string            `json:"from,omitempty"`
+	To            []string          `json:"to"`
+	Cc            []string          `json:"cc,omitempty"`
+	Bcc           []string          `json:"bcc,omitempty"`
+	ReplyTo       []string          `json:"reply_to,omitempty"`
+	Subject       string            `json:"subject,omitempty"`
+	Template      *Template         `json:"template,omitempty"`
+	HTML          string            `json:"html,omitempty"`
+	Text          string            `json:"text,omitempty"`
+	Headers       map[string]string `json:"headers,omitempty"`
+	Tags          []Tag             `json:"tags,omitempty"`
+	OpenTracking  Nullable[bool]    `json:"open_tracking,omitzero"`
+	ClickTracking Nullable[bool]    `json:"click_tracking,omitzero"`
 }
 
 type SendEmailResponse struct {

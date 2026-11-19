@@ -311,6 +311,12 @@ func TestEmailRoutes(t *testing.T) {
 		{method: "POST", path: "/v1/emails/batch", body: `[{"to":["jane@acme.dev"],"text":"Hi"}]`, call: func(ctx context.Context, c *Client) error {
 			return ignore(c.Emails.Batch(ctx, []BatchEmailParams{{To: []string{"jane@acme.dev"}, Text: "Hi"}}))
 		}},
+		{method: "POST", path: "/v1/emails", body: `{"to":["jane@acme.dev"],"open_tracking":false}`, call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Emails.Send(ctx, SendEmailParams{To: []string{"jane@acme.dev"}, OpenTracking: Value(false)}))
+		}},
+		{method: "POST", path: "/v1/emails/batch", body: `[{"to":["jane@acme.dev"],"open_tracking":false,"click_tracking":true}]`, call: func(ctx context.Context, c *Client) error {
+			return ignore(c.Emails.Batch(ctx, []BatchEmailParams{{To: []string{"jane@acme.dev"}, OpenTracking: Value(false), ClickTracking: Value(true)}}))
+		}},
 		{method: "GET", path: "/v1/emails/em_1", call: func(ctx context.Context, c *Client) error {
 			return ignore(c.Emails.Get(ctx, "em_1"))
 		}},
