@@ -208,7 +208,7 @@ func TestRetries(t *testing.T) {
 				reply(w, 202, `{"contact_id":"ct_1"}`)
 			})
 
-			params := SendEventParams{Name: "signed_up", Email: "jane@acme.dev"}
+			params := SendEventParams{Event: "signed_up", Email: "jane@acme.dev"}
 			_, err := client.Events.Send(context.Background(), params, tc.opts...)
 
 			got := requests()

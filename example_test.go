@@ -93,9 +93,9 @@ func ExampleEventService_Send() {
 	client := inboxjot.NewClient("")
 
 	params := inboxjot.SendEventParams{
-		Name:  "signed_up",
-		Email: "jane@example.com",
-		Data:  map[string]any{"plan": "pro"},
+		Event:      "signed_up",
+		Email:      "jane@example.com",
+		Properties: map[string]any{"plan": "pro"},
 	}
 
 	_, err := client.Events.Send(context.Background(), params)

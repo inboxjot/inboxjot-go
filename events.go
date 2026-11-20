@@ -7,11 +7,12 @@ import (
 )
 
 type SendEventParams struct {
-	Name       string         `json:"name"`
+	ID         string         `json:"id,omitempty"`
+	Event      string         `json:"event"`
 	Email      string         `json:"email,omitempty"`
 	UserID     string         `json:"user_id,omitempty"`
 	OccurredAt time.Time      `json:"occurred_at,omitzero"`
-	Data       map[string]any `json:"data,omitempty"`
+	Properties map[string]any `json:"properties,omitempty"`
 }
 
 type SendEventResponse struct {

@@ -38,7 +38,7 @@ client.Emails.List(ctx, inboxjot.ListEmailsParams{Source: inboxjot.SourceAPI, Pe
 client.Contacts.Create(ctx, inboxjot.CreateContactParams{Email: "jane@example.com", FirstName: inboxjot.Value("Jane")})
 client.Contacts.Update(ctx, "jane@example.com", inboxjot.UpdateContactParams{LastName: inboxjot.Null[string]()})
 client.Contacts.Erase(ctx, inboxjot.EraseContactParams{Email: "jane@example.com"})
-client.Events.Send(ctx, inboxjot.SendEventParams{Name: "signed_up", Email: "jane@example.com"})
+client.Events.Send(ctx, inboxjot.SendEventParams{Event: "signed_up", Email: "jane@example.com"})
 
 client.Campaigns.Send(ctx, "cmp_...", inboxjot.SendCampaignParams{ScheduledAt: time.Now().Add(24 * time.Hour)})
 client.Templates.Publish(ctx, "tpl_...")
